@@ -122,6 +122,7 @@ clean_sim:
 clean_fm:
 	rm -rf \
 		./FM_WORK \
+		./FM_INFO \
 		./formality.log \
 		./fm_core* \
 		./formality_svf/ \

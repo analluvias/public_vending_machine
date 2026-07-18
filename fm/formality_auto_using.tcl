@@ -6,6 +6,12 @@
 ########################################################################
 
 ########################################################################
+# Read in the SVF file(s)
+########################################################################
+
+set_svf reports/default_ungrouped.svf
+
+########################################################################
 # Synopsys Auto Setup Mode
 ########################################################################
 
@@ -63,11 +69,7 @@ set search_path " \
 	/home/ana.meira/ci-expert/vending_machine_rtl-master/libs \
 	/home/ana.meira/ci-expert/vending_machine_rtl-master/libs "
 
-########################################################################
-# Read in the SVF file(s)
-########################################################################
 
-set_svf reports/default.svf
 
 ########################################################################
 # Read in the libraries
@@ -112,7 +114,7 @@ set_top r:/WORK/vending_top
 ########################################################################
 
 # USER INTERVENTION REQUIRED HERE:
-read_verilog -i /home/ana.meira/ci-expert/vending_machine_rtl-master/synth/vending_syn.v
+read_verilog -i /home/ana.meira/ci-expert/vending_machine_rtl-master/synth/vending_top_netlist_ungrouped.v
 # read_ddc -i /home/ana.meira/ci-expert/vending_machine_rtl-master/synth/vending_syn.ddc
 # read_ddc -i /home/ana.meira/ci-expert/vending_machine_rtl-master/synth/vending.ddc
 set_top i:/WORK/vending_top
@@ -123,26 +125,19 @@ match
 
 # 7. Prova de equivalência ponto a ponto
 verify
+# ------------------------------------------------------------
+# 8. Relatórios de Sign-off / Acompanhamento
+# ------------------------------------------------------------
+# O redirect previne que o Formality trave caso um comando falhe.
+# O "report_status" salva o resultado final (SUCCEEDED/FAILED) que o enunciado pediu.
 
-# 8. Relatórios de sign-off
 redirect -file fm/reports/formality_status.rpt { report_status }
-report_passing_points > fm/reports/formality_passing.rpt
-report_failing_points > fm/reports/formality_failing.rpt
-report_unmatched_points > fm/reports/formality_unmatched.rpt
-
-# ------------------------------------------------------------
-# Relatórios ACOMPANHAMENTO
-# ------------------------------------------------------------
-
-# Salva os relatórios na nova pasta
-report_svf_operation -status accepted > fm/reports/formality_svf_accepted.rpt
-report_svf_operation -status rejected > fm/reports/formality_svf_rejected.rpt
-
-report_matched_points > fm/reports/formality_matched.rpt
-report_unmatched_points > fm/reports/formality_unmatched.rpt
-
-report_passing_points > fm/reports/formality_pass.rpt
-report_failing_points > fm/reports/formality_fail.rpt
+redirect -file fm/reports/formality_svf_accepted.rpt { report_svf_operation -status accepted }
+redirect -file fm/reports/formality_svf_rejected.rpt { report_svf_operation -status rejected }
+redirect -file fm/reports/formality_matched.rpt { report_matched_points }
+redirect -file fm/reports/formality_unmatched.rpt { report_unmatched_points }
+redirect -file fm/reports/formality_pass.rpt { report_passing_points }
+redirect -file fm/reports/formality_fail.rpt { report_failing_points }
 
 # Descomente a linha abaixo para o Formality fechar sozinho quando terminar
 exit

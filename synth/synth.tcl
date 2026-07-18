@@ -17,7 +17,7 @@ file mkdir reports
 
 # Grava o histórico de otimizações do Design Compiler a partir daqui.
 # Precisa vir ANTES de compile_ultra para capturar toda a compilação.
-set_svf reports/default.svf
+set_svf reports/default_ungrouped.svf
 
 # ------------------------------------------------------------
 # Ler RTL
@@ -79,7 +79,8 @@ puts "\n=================================================="
 puts "INICIANDO SÍNTESE"
 puts "=================================================="
 
-compile_ultra -no_autoungroup
+compile_ultra 
+# -no_autoungroup
 
 # ------------------------------------------------------------
 # Relatórios pós-síntese
@@ -105,17 +106,17 @@ report_constraint -all_violators
 # Exportar netlist
 # ------------------------------------------------------------
 
-write -format verilog -hierarchy -output synth/vending_syn.v
+write -format verilog -hierarchy -output synth/vending_top_netlist_ungrouped.v
 
-write -format ddc -hierarchy -output synth/vending_syn.ddc
+write -format ddc -hierarchy -output synth/vending_top_netlist_ungrouped.ddc
 
-write_sdc synth/vending_syn.sdc
+write_sdc synth/vending_top_netlist_ungrouped.sdc
 
 # ------------------------------------------------------------
 # Salvar sessão do DC
 # ------------------------------------------------------------
 
-write_file -format ddc -hierarchy -output synth/vending.ddc
+write_file -format ddc -hierarchy -output synth/vending_top_netlist_ungrouped.ddc
 
 puts "\n=================================================="
 puts "SÍNTESE CONCLUÍDA"
@@ -125,8 +126,8 @@ puts "  synth/area_pos.rpt"
 puts "  synth/timing_relatorio.rpt"
 puts "  synth/power.rpt"
 puts "  synth/setup_violations.rpt"
-puts "  synth/vending_syn.v"
-puts "  synth/vending_syn.ddc"
+puts "  synth/vending_top_netlist_ungrouped.v"
+puts "  synth/vending_top_netlist_ungrouped.ddc"
 puts "=================================================="
 
 # Fecha o arquivo SVF e salva no disco de forma segura
